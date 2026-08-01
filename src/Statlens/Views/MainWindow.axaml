@@ -9,7 +9,13 @@
         mc:Ignorable="d" d:DesignWidth="260" d:DesignHeight="320"
         x:Class="Statlens.Views.MainWindow"
         x:DataType="vm:MainViewModel"
-        Title="Statlens">
+        Title="Statlens"
+        Width="260"
+        Height="320"
+        CanResize="False"
+        WindowDecorations="None"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterScreen">
 
     <Design.DataContext>
         <vm:MainViewModel />
