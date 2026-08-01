@@ -14,18 +14,19 @@
         Height="320"
         CanResize="False"
         WindowDecorations="None"
-        ExtendClientAreaToDecorationsHint="True"
         ShowInTaskbar="False"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        TransparencyLevelHint="Mica">
 
     <Design.DataContext>
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <Grid Background="Transparent" PointerPressed="OnRootPointerPressed">
+    <Panel Background="Transparent" PointerPressed="OnRootPointerPressed">
         <TextBlock HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text="Statlens" />
-    </Grid>
+    </Panel>
 
 </Window>
