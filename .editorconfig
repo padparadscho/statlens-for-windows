@@ -23,6 +23,7 @@ csharp_new_line_before_open_brace = all
 csharp_style_prefer_primary_constructors = true:suggestion
 csharp_style_prefer_top_level_statements = false:suggestion
 
+# Constants: PascalCase, no prefix
 dotnet_naming_rule.constants_pascal_case.severity = warning
 dotnet_naming_rule.constants_pascal_case.symbols = constant_fields
 dotnet_naming_rule.constants_pascal_case.style = pascal_case
@@ -31,6 +32,15 @@ dotnet_naming_symbols.constant_fields.applicable_accessibilities = private, inte
 dotnet_naming_symbols.constant_fields.required_modifiers = const
 dotnet_naming_style.pascal_case.capitalization = pascal_case
 
+# Static readonly fields: PascalCase, no prefix
+dotnet_naming_rule.static_readonly_pascal_case.severity = warning
+dotnet_naming_rule.static_readonly_pascal_case.symbols = static_readonly_fields
+dotnet_naming_rule.static_readonly_pascal_case.style = pascal_case
+dotnet_naming_symbols.static_readonly_fields.applicable_kinds = field
+dotnet_naming_symbols.static_readonly_fields.applicable_accessibilities = private, internal, public, protected
+dotnet_naming_symbols.static_readonly_fields.required_modifiers = static, readonly
+
+# Private fields: _camelCase
 dotnet_naming_rule.private_fields_underscore.severity = warning
 dotnet_naming_rule.private_fields_underscore.symbols = private_fields
 dotnet_naming_rule.private_fields_underscore.style = underscore_camel_case
