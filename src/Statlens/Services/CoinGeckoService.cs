@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Statlens.Models;
@@ -19,7 +20,10 @@ public sealed class CoinGeckoService(HttpClient httpClient) : ICoinGeckoService
 
         try
         {
-            using var httpResponse = await httpClient.GetAsync(coinGeckoRequestUrl, cancellationToken);
+            using var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, coinGeckoRequestUrl);
+            httpRequestMessage.Headers.UserAgent.Add(new ProductInfoHeaderValue("Statlens", "1.0"));
+
+            using var httpResponse = await httpClient.SendAsync(httpRequestMessage, cancellationToken);
 
             if (!httpResponse.IsSuccessStatusCode)
             {
