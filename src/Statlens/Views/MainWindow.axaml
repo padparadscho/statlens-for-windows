@@ -17,16 +17,20 @@
         ShowInTaskbar="False"
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
-        TransparencyLevelHint="Mica">
+        TransparencyLevelHint="Mica"
+        Topmost="{Binding IsPinned}">
 
     <Design.DataContext>
         <vm:MainViewModel />
     </Design.DataContext>
 
     <Panel Background="Transparent" PointerPressed="OnRootPointerPressed">
-        <TextBlock HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Text="Statlens" />
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8">
+            <TextBlock HorizontalAlignment="Center" Text="Statlens" />
+            <ToggleButton HorizontalAlignment="Center"
+                          Content="Pin"
+                          IsChecked="{Binding IsPinned}" />
+        </StackPanel>
     </Panel>
 
 </Window>
