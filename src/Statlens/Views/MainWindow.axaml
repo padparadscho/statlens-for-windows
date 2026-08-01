@@ -1,0 +1,24 @@
+<!-- SPDX-FileCopyrightText: 2026 Padparadscho <contact@padparadscho.com> -->
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Statlens.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="260" d:DesignHeight="320"
+        x:Class="Statlens.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="Statlens">
+
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <TextBlock HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Text="Statlens" />
+    </Grid>
+
+</Window>
