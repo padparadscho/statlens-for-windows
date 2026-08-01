@@ -1,10 +1,11 @@
 // SPDX-FileCopyrightText: 2026 Padparadscho <contact@padparadscho.com>
 // SPDX-License-Identifier: AGPL-3.0-only
 
+using System.Net.Http;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Statlens.Services;
 using Statlens.ViewModels;
 using Statlens.Views;
 
@@ -20,9 +21,11 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            var coinGeckoService = new CoinGeckoService(new HttpClient());
+
             _mainWindow = new MainWindow
             {
-                DataContext = new MainViewModel(),
+                DataContext = new MainViewModel(coinGeckoService),
             };
 
             desktop.MainWindow = _mainWindow;

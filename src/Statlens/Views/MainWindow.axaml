@@ -4,6 +4,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Statlens.ViewModels"
+        xmlns:converters="using:Avalonia.Data.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="260" d:DesignHeight="320"
@@ -18,41 +19,70 @@
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
         TransparencyLevelHint="Mica"
-        Topmost="{Binding IsPinned}">
-
-    <Design.DataContext>
-        <vm:MainViewModel />
-    </Design.DataContext>
+        Topmost="{Binding IsPinned, Mode=TwoWay}">
 
     <Panel Background="Transparent" PointerPressed="OnRootPointerPressed">
         <Panel.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Change"
                           ToggleType="CheckBox"
-                          IsChecked="{Binding ShowChange}" />
+                          IsChecked="{Binding ShowChange, Mode=TwoWay}" />
                 <MenuItem Header="Sparkline"
                           ToggleType="CheckBox"
-                          IsChecked="{Binding ShowSparkline}" />
+                          IsChecked="{Binding ShowSparkline, Mode=TwoWay}" />
                 <MenuItem Header="Volume"
                           ToggleType="CheckBox"
-                          IsChecked="{Binding ShowVolume}" />
+                          IsChecked="{Binding ShowVolume, Mode=TwoWay}" />
                 <MenuItem Header="High/Low"
                           ToggleType="CheckBox"
-                          IsChecked="{Binding ShowHighLow}" />
+                          IsChecked="{Binding ShowHighLow, Mode=TwoWay}" />
                 <MenuItem Header="Supply"
                           ToggleType="CheckBox"
-                          IsChecked="{Binding ShowSupply}" />
+                          IsChecked="{Binding ShowSupply, Mode=TwoWay}" />
                 <MenuItem Header="Market Cap"
                           ToggleType="CheckBox"
-                          IsChecked="{Binding ShowMarketCap}" />
+                          IsChecked="{Binding ShowMarketCap, Mode=TwoWay}" />
             </ContextMenu>
         </Panel.ContextMenu>
 
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8">
-            <TextBlock HorizontalAlignment="Center" Text="Statlens" />
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="6">
+            <TextBlock HorizontalAlignment="Center"
+                       Foreground="OrangeRed"
+                       IsVisible="{Binding ErrorMessage, Converter={x:Static converters:StringConverters.IsNotNullOrEmpty}}"
+                       Text="{Binding ErrorMessage}" />
+
+            <TextBlock HorizontalAlignment="Center"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Text="{Binding CurrentAssetData.Price, StringFormat='${0:N4}'}" />
+
+            <TextBlock HorizontalAlignment="Center"
+                       IsVisible="{Binding ShowChange}"
+                       Text="{Binding CurrentAssetData.DailyChangePercentage, StringFormat='{}{0:+0.00;-0.00}%'}" />
+
+            <TextBlock HorizontalAlignment="Center"
+                       IsVisible="{Binding ShowVolume}"
+                       Text="{Binding CurrentAssetData.DailyVolume, StringFormat='Vol: {0:N0}'}" />
+
+            <TextBlock HorizontalAlignment="Center"
+                       IsVisible="{Binding ShowHighLow}"
+                       Text="{Binding CurrentAssetData.DailyHigh, StringFormat='High: {0:N4}'}" />
+
+            <TextBlock HorizontalAlignment="Center"
+                       IsVisible="{Binding ShowHighLow}"
+                       Text="{Binding CurrentAssetData.DailyLow, StringFormat='Low: {0:N4}'}" />
+
+            <TextBlock HorizontalAlignment="Center"
+                       IsVisible="{Binding ShowSupply}"
+                       Text="{Binding CurrentAssetData.CirculatingSupply, StringFormat='Supply: {0:N0}'}" />
+
+            <TextBlock HorizontalAlignment="Center"
+                       IsVisible="{Binding ShowMarketCap}"
+                       Text="{Binding CurrentAssetData.MarketCap, StringFormat='MCap: {0:N0}'}" />
+
             <ToggleButton HorizontalAlignment="Center"
                           Content="Pin"
-                          IsChecked="{Binding IsPinned}" />
+                          IsChecked="{Binding IsPinned, Mode=TwoWay}" />
         </StackPanel>
     </Panel>
 
