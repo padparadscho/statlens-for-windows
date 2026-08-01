@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src\Statlens\Statlens.csproj" />
+  <Project Path="tests\Statlens.Tests\Statlens.Tests.csproj" />
+</Solution>
