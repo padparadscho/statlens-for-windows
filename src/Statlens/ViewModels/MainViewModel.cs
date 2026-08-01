@@ -9,4 +9,22 @@ public partial class MainViewModel : ViewModelBase
 {
     [ObservableProperty]
     public partial bool IsPinned { get; set; }
+
+    [ObservableProperty]
+    public partial bool ShowChange { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool ShowSparkline { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool ShowVolume { get; set; }
+
+    [ObservableProperty]
+    public partial bool ShowHighLow { get; set; }
+
+    [ObservableProperty]
+    public partial bool ShowSupply { get; set; }
+
+    [ObservableProperty]
+    public partial bool ShowMarketCap { get; set; }
 }

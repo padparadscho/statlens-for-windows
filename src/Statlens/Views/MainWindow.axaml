@@ -25,6 +25,29 @@
     </Design.DataContext>
 
     <Panel Background="Transparent" PointerPressed="OnRootPointerPressed">
+        <Panel.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Change"
+                          ToggleType="CheckBox"
+                          IsChecked="{Binding ShowChange}" />
+                <MenuItem Header="Sparkline"
+                          ToggleType="CheckBox"
+                          IsChecked="{Binding ShowSparkline}" />
+                <MenuItem Header="Volume"
+                          ToggleType="CheckBox"
+                          IsChecked="{Binding ShowVolume}" />
+                <MenuItem Header="High/Low"
+                          ToggleType="CheckBox"
+                          IsChecked="{Binding ShowHighLow}" />
+                <MenuItem Header="Supply"
+                          ToggleType="CheckBox"
+                          IsChecked="{Binding ShowSupply}" />
+                <MenuItem Header="Market Cap"
+                          ToggleType="CheckBox"
+                          IsChecked="{Binding ShowMarketCap}" />
+            </ContextMenu>
+        </Panel.ContextMenu>
+
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8">
             <TextBlock HorizontalAlignment="Center" Text="Statlens" />
             <ToggleButton HorizontalAlignment="Center"
