@@ -81,6 +81,24 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
     public IBrush PriceBrush => ChangeBrush;
 
+    public double HighLowPercent
+    {
+        get
+        {
+            var assetData = CurrentAssetData;
+            if (assetData is null || assetData.DailyHigh <= 0 || assetData.DailyLow <= 0 || assetData.DailyHigh <= assetData.DailyLow)
+            {
+                return 100;
+            }
+
+            return (double)Math.Clamp((assetData.Price - assetData.DailyLow) / (assetData.DailyHigh - assetData.DailyLow) * 100, 0, 100);
+        }
+    }
+
+    public string FormattedDailyLow => CurrentAssetData is { } assetData ? $"${assetData.DailyLow:N4}" : string.Empty;
+
+    public string FormattedDailyHigh => CurrentAssetData is { } assetData ? $"${assetData.DailyHigh:N4}" : string.Empty;
+
     public MainViewModel(ICoinGeckoService coinGeckoService)
     {
         _coinGeckoService = coinGeckoService;
@@ -118,6 +136,9 @@ public partial class MainViewModel : ViewModelBase, IDisposable
             OnPropertyChanged(nameof(ChangeBrush));
             OnPropertyChanged(nameof(ChangeBadgeBrush));
             OnPropertyChanged(nameof(PriceBrush));
+            OnPropertyChanged(nameof(HighLowPercent));
+            OnPropertyChanged(nameof(FormattedDailyLow));
+            OnPropertyChanged(nameof(FormattedDailyHigh));
         }
         finally
         {

@@ -37,6 +37,12 @@
             <Setter Property="FontFamily" Value="Segoe Fluent Icons" />
             <Setter Property="FontSize" Value="12" />
         </Style>
+        <Style Selector="TextBlock.caption">
+            <Setter Property="FontSize" Value="8.5" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Opacity" Value="0.5" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+        </Style>
     </Window.Styles>
 
     <Panel Background="Transparent" PointerPressed="OnRootPointerPressed">
@@ -157,23 +163,28 @@
                 </Border>
             </Grid>
 
-            <controls:SparklineControl Height="46"
-                                        Margin="-10,8,-10,-9"
-                                        IsPositive="{Binding IsChangePositive}"
-                                        IsVisible="{Binding ShowSparkline}"
-                                        Prices="{Binding CurrentAssetData.Sparkline}" />
-
             <TextBlock HorizontalAlignment="Center"
                        IsVisible="{Binding ShowVolume}"
                        Text="{Binding CurrentAssetData.DailyVolume, StringFormat='Vol: {0:N0}'}" />
 
-            <TextBlock HorizontalAlignment="Center"
-                       IsVisible="{Binding ShowHighLow}"
-                       Text="{Binding CurrentAssetData.DailyHigh, StringFormat='High: {0:N4}'}" />
-
-            <TextBlock HorizontalAlignment="Center"
-                       IsVisible="{Binding ShowHighLow}"
-                       Text="{Binding CurrentAssetData.DailyLow, StringFormat='Low: {0:N4}'}" />
+            <StackPanel Margin="0,8,0,0" IsVisible="{Binding ShowHighLow}">
+                <TextBlock Classes="caption" Text="24H HIGH / LOW" />
+                <controls:RangeBarControl Height="10" Percent="{Binding HighLowPercent}">
+                    <controls:RangeBarControl.FillBrush>
+                        <SolidColorBrush Color="{DynamicResource SystemAccentColor}" />
+                    </controls:RangeBarControl.FillBrush>
+                </controls:RangeBarControl>
+                <Grid Margin="0,2,0,0" ColumnDefinitions="*,Auto">
+                    <TextBlock Grid.Column="0"
+                               FontSize="8.5"
+                               Opacity="0.55"
+                               Text="{Binding FormattedDailyLow}" />
+                    <TextBlock Grid.Column="1"
+                               FontSize="8.5"
+                               Opacity="0.55"
+                               Text="{Binding FormattedDailyHigh}" />
+                </Grid>
+            </StackPanel>
 
             <TextBlock HorizontalAlignment="Center"
                        IsVisible="{Binding ShowSupply}"
@@ -182,6 +193,12 @@
             <TextBlock HorizontalAlignment="Center"
                        IsVisible="{Binding ShowMarketCap}"
                        Text="{Binding CurrentAssetData.MarketCap, StringFormat='MCap: {0:N0}'}" />
+
+            <controls:SparklineControl Height="46"
+                                        Margin="-10,8,-10,-9"
+                                        IsPositive="{Binding IsChangePositive}"
+                                        IsVisible="{Binding ShowSparkline}"
+                                        Prices="{Binding CurrentAssetData.Sparkline}" />
         </StackPanel>
     </Panel>
 
