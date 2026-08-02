@@ -99,6 +99,28 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
     public string FormattedDailyHigh => CurrentAssetData is { } assetData ? $"${assetData.DailyHigh:N4}" : string.Empty;
 
+    public double SupplyPercent
+    {
+        get
+        {
+            var assetData = CurrentAssetData;
+            if (assetData?.TotalSupply is not { } totalSupply || totalSupply <= 0)
+            {
+                return 100;
+            }
+
+            return (double)Math.Clamp(assetData.CirculatingSupply / totalSupply * 100, 0, 100);
+        }
+    }
+
+    public string FormattedCirculatingSupply => CurrentAssetData is { } assetData
+        ? FormatCount(assetData.CirculatingSupply)
+        : string.Empty;
+
+    public string FormattedTotalSupply => CurrentAssetData?.TotalSupply is { } totalSupply
+        ? FormatCount(totalSupply)
+        : "—";
+
     public MainViewModel(ICoinGeckoService coinGeckoService)
     {
         _coinGeckoService = coinGeckoService;
@@ -139,6 +161,9 @@ public partial class MainViewModel : ViewModelBase, IDisposable
             OnPropertyChanged(nameof(HighLowPercent));
             OnPropertyChanged(nameof(FormattedDailyLow));
             OnPropertyChanged(nameof(FormattedDailyHigh));
+            OnPropertyChanged(nameof(SupplyPercent));
+            OnPropertyChanged(nameof(FormattedCirculatingSupply));
+            OnPropertyChanged(nameof(FormattedTotalSupply));
         }
         finally
         {
@@ -157,6 +182,14 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     private void TogglePin() => IsPinned = !IsPinned;
 
     private async void OnRefreshTimerTick(object? sender, EventArgs eventArgs) => await RefreshAssetDataAsync();
+
+    private static string FormatCount(decimal value) => value switch
+    {
+        >= 1_000_000_000m => $"{value / 1_000_000_000m:F1}B",
+        >= 1_000_000m => $"{value / 1_000_000m:F1}M",
+        >= 1_000m => $"{value / 1_000m:F1}K",
+        _ => $"{value:N0}",
+    };
 
     public void Dispose()
     {

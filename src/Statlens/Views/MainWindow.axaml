@@ -186,9 +186,24 @@
                 </Grid>
             </StackPanel>
 
-            <TextBlock HorizontalAlignment="Center"
-                       IsVisible="{Binding ShowSupply}"
-                       Text="{Binding CurrentAssetData.CirculatingSupply, StringFormat='Supply: {0:N0}'}" />
+            <StackPanel Margin="0,8,0,0" IsVisible="{Binding ShowSupply}">
+                <TextBlock Classes="caption" Text="CIRCULATING SUPPLY" />
+                <controls:RangeBarControl Height="10" Percent="{Binding SupplyPercent}">
+                    <controls:RangeBarControl.FillBrush>
+                        <SolidColorBrush Color="{DynamicResource SystemAccentColor}" />
+                    </controls:RangeBarControl.FillBrush>
+                </controls:RangeBarControl>
+                <Grid Margin="0,2,0,0" ColumnDefinitions="*,Auto">
+                    <TextBlock Grid.Column="0"
+                               FontSize="8.5"
+                               Opacity="0.55"
+                               Text="{Binding FormattedCirculatingSupply}" />
+                    <TextBlock Grid.Column="1"
+                               FontSize="8.5"
+                               Opacity="0.55"
+                               Text="{Binding FormattedTotalSupply}" />
+                </Grid>
+            </StackPanel>
 
             <TextBlock HorizontalAlignment="Center"
                        IsVisible="{Binding ShowMarketCap}"
