@@ -157,9 +157,8 @@
                 </Border>
             </Grid>
 
-            <controls:SparklineControl Width="200"
-                                        Height="40"
-                                        HorizontalAlignment="Center"
+            <controls:SparklineControl Height="46"
+                                        Margin="-10,8,-10,-9"
                                         IsVisible="{Binding ShowSparkline}"
                                         Prices="{Binding CurrentAssetData.Sparkline}"
                                         StrokeBrush="DeepSkyBlue"
