@@ -4,6 +4,7 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Avalonia.Media;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -16,6 +17,14 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 {
     private const string CoinGeckoAssetId = "stronghold-token";
     private static readonly TimeSpan RefreshInterval = TimeSpan.FromSeconds(600);
+
+    private static readonly IBrush PositiveBrush = new SolidColorBrush(Color.Parse("#26A269"));
+    private static readonly IBrush NegativeBrush = new SolidColorBrush(Color.Parse("#E01B24"));
+    private static readonly IBrush NeutralBrush = new SolidColorBrush(Color.Parse("#808080"));
+
+    private static readonly IBrush PositiveBadgeBrush = new SolidColorBrush(Color.Parse("#2826A269"));
+    private static readonly IBrush NegativeBadgeBrush = new SolidColorBrush(Color.Parse("#28E01B24"));
+    private static readonly IBrush NeutralBadgeBrush = new SolidColorBrush(Color.Parse("#28808080"));
 
     private readonly ICoinGeckoService _coinGeckoService;
     private readonly DispatcherTimer _refreshTimer;
@@ -54,6 +63,22 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
     public bool HasRank => CurrentAssetData?.MarketCapRank is not null;
 
+    public IBrush ChangeBrush => CurrentAssetData?.DailyChangePercentage switch
+    {
+        > 0 => PositiveBrush,
+        < 0 => NegativeBrush,
+        _ => NeutralBrush,
+    };
+
+    public IBrush ChangeBadgeBrush => CurrentAssetData?.DailyChangePercentage switch
+    {
+        > 0 => PositiveBadgeBrush,
+        < 0 => NegativeBadgeBrush,
+        _ => NeutralBadgeBrush,
+    };
+
+    public IBrush PriceBrush => ChangeBrush;
+
     public MainViewModel(ICoinGeckoService coinGeckoService)
     {
         _coinGeckoService = coinGeckoService;
@@ -87,6 +112,9 @@ public partial class MainViewModel : ViewModelBase, IDisposable
             ErrorMessage = null;
             OnPropertyChanged(nameof(RankText));
             OnPropertyChanged(nameof(HasRank));
+            OnPropertyChanged(nameof(ChangeBrush));
+            OnPropertyChanged(nameof(ChangeBadgeBrush));
+            OnPropertyChanged(nameof(PriceBrush));
         }
         finally
         {
