@@ -18,6 +18,8 @@ public class CoinGeckoServiceTests
         const string responseBody = """
         [
             {
+                "name": "Stronghold Token",
+                "symbol": "shx",
                 "current_price": 0.05,
                 "price_change_percentage_24h": 3.2,
                 "total_volume": 100000,
@@ -38,6 +40,8 @@ public class CoinGeckoServiceTests
         var assetData = await coinGeckoService.GetAssetDataAsync("stronghold-token");
 
         Assert.NotNull(assetData);
+        Assert.Equal("Stronghold Token", assetData.Name);
+        Assert.Equal("SHX", assetData.Symbol);
         Assert.Equal(0.05m, assetData.Price);
         Assert.Equal(3.2m, assetData.DailyChangePercentage);
         Assert.Equal(500, assetData.MarketCapRank);

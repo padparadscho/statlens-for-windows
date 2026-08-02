@@ -5,6 +5,10 @@ namespace Statlens.Models;
 
 public sealed record AssetData
 {
+    public required string Name { get; init; }
+
+    public required string Symbol { get; init; }
+
     public required decimal Price { get; init; }
 
     public decimal DailyChangePercentage { get; init; }

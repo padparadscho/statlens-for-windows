@@ -42,6 +42,8 @@ public sealed class CoinGeckoService(HttpClient httpClient) : ICoinGeckoService
 
             return new AssetData
             {
+                Name = GetString(assetJsonElement, "name") ?? coinGeckoAssetId,
+                Symbol = GetString(assetJsonElement, "symbol")?.ToUpperInvariant() ?? string.Empty,
                 Price = GetDecimal(assetJsonElement, "current_price"),
                 DailyChangePercentage = GetDecimal(assetJsonElement, "price_change_percentage_24h"),
                 DailyVolume = GetDecimal(assetJsonElement, "total_volume"),
@@ -78,6 +80,16 @@ public sealed class CoinGeckoService(HttpClient httpClient) : ICoinGeckoService
             .Where(sparklinePriceElement => sparklinePriceElement.ValueKind == JsonValueKind.Number)
             .Select(sparklinePriceElement => sparklinePriceElement.GetDecimal())
             .TakeLast(SparklinePointCount)];
+    }
+
+    private static string? GetString(JsonElement assetJsonElement, string propertyName)
+    {
+        if (!assetJsonElement.TryGetProperty(propertyName, out var propertyValue) || propertyValue.ValueKind == JsonValueKind.Null)
+        {
+            return null;
+        }
+
+        return propertyValue.GetString();
     }
 
     private static decimal GetDecimal(JsonElement assetJsonElement, string propertyName) => TryGetDecimal(assetJsonElement, propertyName) ?? 0m;

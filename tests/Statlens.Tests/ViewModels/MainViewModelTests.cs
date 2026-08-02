@@ -16,6 +16,8 @@ public class MainViewModelTests
     {
         var expectedAssetData = new AssetData
         {
+            Name = "Stronghold Token",
+            Symbol = "SHX",
             Price = 0.05m,
             FetchedAt = DateTime.Now,
         };
