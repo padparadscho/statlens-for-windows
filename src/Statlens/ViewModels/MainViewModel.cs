@@ -63,6 +63,8 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
     public bool HasRank => CurrentAssetData?.MarketCapRank is not null;
 
+    public bool IsChangePositive => CurrentAssetData?.DailyChangePercentage >= 0;
+
     public IBrush ChangeBrush => CurrentAssetData?.DailyChangePercentage switch
     {
         > 0 => PositiveBrush,
@@ -112,6 +114,7 @@ public partial class MainViewModel : ViewModelBase, IDisposable
             ErrorMessage = null;
             OnPropertyChanged(nameof(RankText));
             OnPropertyChanged(nameof(HasRank));
+            OnPropertyChanged(nameof(IsChangePositive));
             OnPropertyChanged(nameof(ChangeBrush));
             OnPropertyChanged(nameof(ChangeBadgeBrush));
             OnPropertyChanged(nameof(PriceBrush));

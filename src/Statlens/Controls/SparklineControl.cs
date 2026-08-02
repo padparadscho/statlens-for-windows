@@ -10,18 +10,18 @@ namespace Statlens.Controls;
 
 public sealed class SparklineControl : Control
 {
+    private static readonly Color PositiveColor = Color.Parse("#26A269");
+    private static readonly Color NegativeColor = Color.Parse("#E01B24");
+
     public static readonly StyledProperty<IReadOnlyList<decimal>?> PricesProperty =
         AvaloniaProperty.Register<SparklineControl, IReadOnlyList<decimal>?>(nameof(Prices));
 
-    public static readonly StyledProperty<IBrush> StrokeBrushProperty =
-        AvaloniaProperty.Register<SparklineControl, IBrush>(nameof(StrokeBrush), Brushes.DeepSkyBlue);
-
-    public static readonly StyledProperty<double> StrokeThicknessProperty =
-        AvaloniaProperty.Register<SparklineControl, double>(nameof(StrokeThickness), 1.5);
+    public static readonly StyledProperty<bool> IsPositiveProperty =
+    AvaloniaProperty.Register<SparklineControl, bool>(nameof(IsPositive), true);
 
     static SparklineControl()
     {
-        AffectsRender<SparklineControl>(PricesProperty, StrokeBrushProperty, StrokeThicknessProperty);
+        AffectsRender<SparklineControl>(PricesProperty, IsPositiveProperty);
     }
 
     public IReadOnlyList<decimal>? Prices
@@ -30,16 +30,10 @@ public sealed class SparklineControl : Control
         set => SetValue(PricesProperty, value);
     }
 
-    public IBrush StrokeBrush
+    public bool IsPositive
     {
-        get => GetValue(StrokeBrushProperty);
-        set => SetValue(StrokeBrushProperty, value);
-    }
-
-    public double StrokeThickness
-    {
-        get => GetValue(StrokeThicknessProperty);
-        set => SetValue(StrokeThicknessProperty, value);
+        get => GetValue(IsPositiveProperty);
+        set => SetValue(IsPositiveProperty, value);
     }
 
     public override void Render(DrawingContext context)
@@ -47,7 +41,7 @@ public sealed class SparklineControl : Control
         base.Render(context);
 
         var prices = Prices;
-        if (prices is null || prices.Count < 2)
+        if (prices is null || prices.Count < 2 || Bounds.Width <= 0 || Bounds.Height <= 0)
         {
             return;
         }
@@ -74,31 +68,66 @@ public sealed class SparklineControl : Control
             priceRange = 1;
         }
 
+        var trendColor = IsPositive ? PositiveColor : NegativeColor;
         var pointCount = prices.Count;
         var horizontalStep = Bounds.Width / (pointCount - 1);
+        var points = new Point[pointCount];
 
-        var sparklineGeometry = new StreamGeometry();
-        using (var geometryContext = sparklineGeometry.Open())
+        for (var pointIndex = 0; pointIndex < pointCount; pointIndex++)
         {
-            for (var pointIndex = 0; pointIndex < pointCount; pointIndex++)
-            {
-                var normalizedHeight = (double)((prices[pointIndex] - lowestPrice) / priceRange);
-                var pointX = horizontalStep * pointIndex;
-                var pointY = Bounds.Height - (normalizedHeight * Bounds.Height);
+            var normalizedHeight = (double)((prices[pointIndex] - lowestPrice) / priceRange);
+            var pointX = horizontalStep * pointIndex;
+            var pointY = Bounds.Height - (normalizedHeight * Bounds.Height);
+            points[pointIndex] = new Point(pointX, pointY);
+        }
 
-                if (pointIndex == 0)
-                {
-                    geometryContext.BeginFigure(new Point(pointX, pointY), isFilled: false);
-                }
-                else
-                {
-                    geometryContext.LineTo(new Point(pointX, pointY));
-                }
+        var areaGeometry = new StreamGeometry();
+        using (var geometryContext = areaGeometry.Open())
+        {
+            geometryContext.BeginFigure(new Point(0, Bounds.Height), isFilled: true);
+            geometryContext.LineTo(points[0]);
+
+            foreach (var point in points)
+            {
+                geometryContext.LineTo(point);
+            }
+
+            geometryContext.LineTo(new Point(Bounds.Width, Bounds.Height));
+            geometryContext.EndFigure(isClosed: true);
+        }
+
+        var fillBrush = new LinearGradientBrush
+        {
+            StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+            EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
+            GradientStops =
+            {
+                new GradientStop(Color.FromArgb(0x70, trendColor.R, trendColor.G, trendColor.B), 0.0),
+                new GradientStop(Color.FromArgb(0x08, trendColor.R, trendColor.G, trendColor.B), 1.0),
+            },
+        };
+
+        context.DrawGeometry(fillBrush, null, areaGeometry);
+
+        var lineGeometry = new StreamGeometry();
+        using (var geometryContext = lineGeometry.Open())
+        {
+            geometryContext.BeginFigure(points[0], isFilled: false);
+
+            for (var pointIndex = 1; pointIndex < points.Length; pointIndex++)
+            {
+                geometryContext.LineTo(points[pointIndex]);
             }
 
             geometryContext.EndFigure(isClosed: false);
         }
 
-        context.DrawGeometry(null, new Pen(StrokeBrush, StrokeThickness), sparklineGeometry);
+        var linePen = new Pen(new SolidColorBrush(trendColor), 1.8)
+        {
+            LineCap = PenLineCap.Round,
+            LineJoin = PenLineJoin.Round,
+        };
+
+        context.DrawGeometry(null, linePen, lineGeometry);
     }
 }

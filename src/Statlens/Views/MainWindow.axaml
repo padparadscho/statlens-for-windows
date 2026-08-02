@@ -159,10 +159,9 @@
 
             <controls:SparklineControl Height="46"
                                         Margin="-10,8,-10,-9"
+                                        IsPositive="{Binding IsChangePositive}"
                                         IsVisible="{Binding ShowSparkline}"
-                                        Prices="{Binding CurrentAssetData.Sparkline}"
-                                        StrokeBrush="DeepSkyBlue"
-                                        StrokeThickness="1.5" />
+                                        Prices="{Binding CurrentAssetData.Sparkline}" />
 
             <TextBlock HorizontalAlignment="Center"
                        IsVisible="{Binding ShowVolume}"
