@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -49,6 +50,10 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     [ObservableProperty]
     public partial string? ErrorMessage { get; set; }
 
+    public string RankText => CurrentAssetData?.MarketCapRank is { } rank ? $"#{rank}" : string.Empty;
+
+    public bool HasRank => CurrentAssetData?.MarketCapRank is not null;
+
     public MainViewModel(ICoinGeckoService coinGeckoService)
     {
         _coinGeckoService = coinGeckoService;
@@ -80,12 +85,24 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
             CurrentAssetData = fetchedAssetData;
             ErrorMessage = null;
+            OnPropertyChanged(nameof(RankText));
+            OnPropertyChanged(nameof(HasRank));
         }
         finally
         {
             IsRefreshing = false;
         }
     }
+
+    [RelayCommand]
+    private static void OpenOnCoinGecko()
+    {
+        var coinGeckoPageUrl = $"https://www.coingecko.com/en/coins/{Uri.EscapeDataString(CoinGeckoAssetId)}";
+        Process.Start(new ProcessStartInfo(coinGeckoPageUrl) { UseShellExecute = true });
+    }
+
+    [RelayCommand]
+    private void TogglePin() => IsPinned = !IsPinned;
 
     private async void OnRefreshTimerTick(object? sender, EventArgs eventArgs) => await RefreshAssetDataAsync();
 

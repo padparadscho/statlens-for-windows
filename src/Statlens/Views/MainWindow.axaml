@@ -8,12 +8,12 @@
         xmlns:converters="using:Avalonia.Data.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="260" d:DesignHeight="320"
+        mc:Ignorable="d" d:DesignWidth="260" d:DesignHeight="360"
         x:Class="Statlens.Views.MainWindow"
         x:DataType="vm:MainViewModel"
         Title="Statlens"
         Width="260"
-        Height="320"
+        Height="360"
         CanResize="False"
         WindowDecorations="None"
         ShowInTaskbar="False"
@@ -21,6 +21,23 @@
         Background="Transparent"
         TransparencyLevelHint="Mica"
         Topmost="{Binding IsPinned, Mode=TwoWay}">
+
+    <Window.Styles>
+        <Style Selector="Button.headerIconButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Width" Value="26" />
+            <Setter Property="Height" Value="26" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TextBlock.iconGlyph">
+            <Setter Property="FontFamily" Value="Segoe Fluent Icons" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+    </Window.Styles>
 
     <Panel Background="Transparent" PointerPressed="OnRootPointerPressed">
         <Panel.ContextMenu>
@@ -46,7 +63,70 @@
             </ContextMenu>
         </Panel.ContextMenu>
 
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="6">
+        <StackPanel Margin="10" Spacing="6">
+            <Grid VerticalAlignment="Center" ColumnDefinitions="Auto,*,Auto">
+                <Image Width="24"
+                       Height="24"
+                       VerticalAlignment="Center"
+                       Source="avares://Statlens/Assets/Stronghold.png"
+                       Stretch="Uniform" />
+
+                <StackPanel Grid.Column="1"
+                            Margin="7,0,0,0"
+                            VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Text="{Binding CurrentAssetData.Name}"
+                                   VerticalAlignment="Center" />
+                        <Border Background="#33FFFFFF"
+                                CornerRadius="7"
+                                IsVisible="{Binding HasRank}"
+                                Margin="5,0,0,0"
+                                Padding="5,1"
+                                VerticalAlignment="Center">
+                            <TextBlock FontSize="8.5"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       LineHeight="10"
+                                       Text="{Binding RankText}"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                    </StackPanel>
+                    <TextBlock FontSize="9"
+                               Margin="0,1,0,0"
+                               Opacity="0.45"
+                               Text="{Binding CurrentAssetData.Symbol}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <Button Classes="headerIconButton"
+                            Command="{Binding RefreshAssetDataCommand}"
+                            ToolTip.Tip="Refresh">
+                        <TextBlock Classes="iconGlyph" Text="&#xE72C;" />
+                    </Button>
+                    <Button Classes="headerIconButton"
+                            Command="{Binding OpenOnCoinGeckoCommand}"
+                            ToolTip.Tip="View on CoinGecko">
+                        <TextBlock Classes="iconGlyph" Text="&#xE774;" />
+                    </Button>
+                    <Button Classes="headerIconButton"
+                            Command="{Binding TogglePinCommand}"
+                            ToolTip.Tip="Always on top">
+                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Classes="iconGlyph"
+                                       IsVisible="{Binding !IsPinned}"
+                                       Text="&#xE718;" />
+                            <TextBlock Classes="iconGlyph"
+                                       IsVisible="{Binding IsPinned}"
+                                       Text="&#xE77A;" />
+                        </Grid>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
             <TextBlock HorizontalAlignment="Center"
                        Foreground="OrangeRed"
                        IsVisible="{Binding ErrorMessage, Converter={x:Static converters:StringConverters.IsNotNullOrEmpty}}"
@@ -63,6 +143,7 @@
 
             <controls:SparklineControl Width="200"
                                         Height="40"
+                                        HorizontalAlignment="Center"
                                         IsVisible="{Binding ShowSparkline}"
                                         Prices="{Binding CurrentAssetData.Sparkline}"
                                         StrokeBrush="DeepSkyBlue"
@@ -87,10 +168,6 @@
             <TextBlock HorizontalAlignment="Center"
                        IsVisible="{Binding ShowMarketCap}"
                        Text="{Binding CurrentAssetData.MarketCap, StringFormat='MCap: {0:N0}'}" />
-
-            <ToggleButton HorizontalAlignment="Center"
-                          Content="Pin"
-                          IsChecked="{Binding IsPinned, Mode=TwoWay}" />
         </StackPanel>
     </Panel>
 
