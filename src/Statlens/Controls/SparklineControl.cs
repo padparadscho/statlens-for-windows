@@ -5,19 +5,17 @@ using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Statlens.Styles;
 
 namespace Statlens.Controls;
 
 public sealed class SparklineControl : Control
 {
-    private static readonly Color PositiveColor = Color.Parse("#26A269");
-    private static readonly Color NegativeColor = Color.Parse("#E01B24");
-
     public static readonly StyledProperty<IReadOnlyList<decimal>?> PricesProperty =
         AvaloniaProperty.Register<SparklineControl, IReadOnlyList<decimal>?>(nameof(Prices));
 
     public static readonly StyledProperty<bool> IsPositiveProperty =
-    AvaloniaProperty.Register<SparklineControl, bool>(nameof(IsPositive), true);
+        AvaloniaProperty.Register<SparklineControl, bool>(nameof(IsPositive), true);
 
     static SparklineControl()
     {
@@ -68,7 +66,7 @@ public sealed class SparklineControl : Control
             priceRange = 1;
         }
 
-        var trendColor = IsPositive ? PositiveColor : NegativeColor;
+        var trendColor = IsPositive ? UiColors.Positive : UiColors.Negative;
         var pointCount = prices.Count;
         var horizontalStep = Bounds.Width / (pointCount - 1);
         var points = new Point[pointCount];

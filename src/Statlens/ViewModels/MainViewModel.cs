@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Statlens.Models;
 using Statlens.Services;
+using Statlens.Styles;
 
 namespace Statlens.ViewModels;
 
@@ -17,14 +18,6 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 {
     private const string CoinGeckoAssetId = "stronghold-token";
     private static readonly TimeSpan RefreshInterval = TimeSpan.FromSeconds(600);
-
-    private static readonly IBrush PositiveBrush = new SolidColorBrush(Color.Parse("#26A269"));
-    private static readonly IBrush NegativeBrush = new SolidColorBrush(Color.Parse("#E01B24"));
-    private static readonly IBrush NeutralBrush = new SolidColorBrush(Color.Parse("#808080"));
-
-    private static readonly IBrush PositiveBadgeBrush = new SolidColorBrush(Color.Parse("#2826A269"));
-    private static readonly IBrush NegativeBadgeBrush = new SolidColorBrush(Color.Parse("#28E01B24"));
-    private static readonly IBrush NeutralBadgeBrush = new SolidColorBrush(Color.Parse("#28808080"));
 
     private readonly ICoinGeckoService _coinGeckoService;
     private readonly DispatcherTimer _refreshTimer;
@@ -67,16 +60,16 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
     public IBrush ChangeBrush => CurrentAssetData?.DailyChangePercentage switch
     {
-        > 0 => PositiveBrush,
-        < 0 => NegativeBrush,
-        _ => NeutralBrush,
+        > 0 => UiColors.PositiveBrush,
+        < 0 => UiColors.NegativeBrush,
+        _ => UiColors.NeutralBrush,
     };
 
     public IBrush ChangeBadgeBrush => CurrentAssetData?.DailyChangePercentage switch
     {
-        > 0 => PositiveBadgeBrush,
-        < 0 => NegativeBadgeBrush,
-        _ => NeutralBadgeBrush,
+        > 0 => UiColors.PositiveBadgeBrush,
+        < 0 => UiColors.NegativeBadgeBrush,
+        _ => UiColors.NeutralBadgeBrush,
     };
 
     public IBrush PriceBrush => ChangeBrush;

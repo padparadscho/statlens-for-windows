@@ -4,13 +4,12 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Statlens.Styles;
 
 namespace Statlens.Controls;
 
 public sealed class RangeBarControl : Control
 {
-    private static readonly IBrush TrackBrush = new SolidColorBrush(Color.Parse("#33808080"));
-
     public static readonly StyledProperty<double> PercentProperty =
         AvaloniaProperty.Register<RangeBarControl, double>(nameof(Percent));
 
@@ -46,7 +45,7 @@ public sealed class RangeBarControl : Control
         var cornerRadius = Bounds.Height / 2;
         var trackRect = new RoundedRect(new Rect(0, 0, Bounds.Width, Bounds.Height), cornerRadius);
 
-        context.DrawRectangle(TrackBrush, null, trackRect);
+        context.DrawRectangle(UiColors.TrackBrush, null, trackRect);
 
         var clampedPercent = Math.Clamp(Percent, 0, 100);
         var fillWidth = Bounds.Width * clampedPercent / 100;
