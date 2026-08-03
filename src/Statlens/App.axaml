@@ -6,6 +6,23 @@
              x:Class="Statlens.App"
              RequestedThemeVariant="Default">
 
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="StatCardBackgroundBrush" Color="#14FFFFFF" />
+                    <SolidColorBrush x:Key="StatCardBorderBrush" Color="#1FFFFFFF" />
+                    <SolidColorBrush x:Key="RankBadgeBackgroundBrush" Color="#33FFFFFF" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="StatCardBackgroundBrush" Color="#14000000" />
+                    <SolidColorBrush x:Key="StatCardBorderBrush" Color="#1F000000" />
+                    <SolidColorBrush x:Key="RankBadgeBackgroundBrush" Color="#1F000000" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="avares://Statlens/Styles/Controls.axaml" />

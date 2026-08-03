@@ -28,8 +28,8 @@
     </Style>
 
     <Style Selector="Border.statCard">
-        <Setter Property="Background" Value="#14FFFFFF" />
-        <Setter Property="BorderBrush" Value="#1FFFFFFF" />
+        <Setter Property="Background" Value="{DynamicResource StatCardBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StatCardBorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="6" />
         <Setter Property="Padding" Value="6,5" />

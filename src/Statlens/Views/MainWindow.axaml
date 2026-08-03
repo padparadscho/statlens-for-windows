@@ -62,7 +62,7 @@
                                    FontWeight="SemiBold"
                                    Text="{Binding CurrentAssetData.Name}"
                                    VerticalAlignment="Center" />
-                        <Border Background="#33FFFFFF"
+                        <Border Background="{DynamicResource RankBadgeBackgroundBrush}"
                                 CornerRadius="7"
                                 IsVisible="{Binding HasRank}"
                                 Margin="5,0,0,0"
