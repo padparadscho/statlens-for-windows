@@ -140,10 +140,6 @@
                 </Border>
             </Grid>
 
-            <TextBlock HorizontalAlignment="Center"
-                       IsVisible="{Binding ShowVolume}"
-                       Text="{Binding CurrentAssetData.DailyVolume, StringFormat='Vol: {0:N0}'}" />
-
             <StackPanel Margin="0,8,0,0" IsVisible="{Binding ShowHighLow}">
                 <TextBlock Classes="caption" Text="24H HIGH / LOW" />
                 <controls:RangeBarControl Height="10" Percent="{Binding HighLowPercent}">
@@ -163,6 +159,21 @@
                 </Grid>
             </StackPanel>
 
+            <controls:StatCardsControl Margin="0,8,0,0" IsVisible="{Binding ShowStatsRow}">
+                <Border Classes="statCard" IsVisible="{Binding ShowVolume}">
+                    <StackPanel>
+                        <TextBlock Classes="caption" Text="24H VOLUME" />
+                        <TextBlock Classes="cardValue" Text="{Binding FormattedVolume}" />
+                    </StackPanel>
+                </Border>
+                <Border Classes="statCard" IsVisible="{Binding ShowMarketCap}">
+                    <StackPanel>
+                        <TextBlock Classes="caption" Text="MARKET CAP" />
+                        <TextBlock Classes="cardValue" Text="{Binding FormattedMarketCap}" />
+                    </StackPanel>
+                </Border>
+            </controls:StatCardsControl>
+
             <StackPanel Margin="0,8,0,0" IsVisible="{Binding ShowSupply}">
                 <TextBlock Classes="caption" Text="CIRCULATING SUPPLY" />
                 <controls:RangeBarControl Height="10" Percent="{Binding SupplyPercent}">
@@ -181,10 +192,6 @@
                                Text="{Binding FormattedTotalSupply}" />
                 </Grid>
             </StackPanel>
-
-            <TextBlock HorizontalAlignment="Center"
-                       IsVisible="{Binding ShowMarketCap}"
-                       Text="{Binding CurrentAssetData.MarketCap, StringFormat='MCap: {0:N0}'}" />
 
             <controls:SparklineControl Height="46"
                                         Margin="-10,8,-10,-9"

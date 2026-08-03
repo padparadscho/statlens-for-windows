@@ -52,6 +52,8 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     [ObservableProperty]
     public partial string? ErrorMessage { get; set; }
 
+    public bool ShowStatsRow => ShowVolume || ShowMarketCap;
+
     public string RankText => CurrentAssetData?.MarketCapRank is { } rank ? $"#{rank}" : string.Empty;
 
     public bool HasRank => CurrentAssetData?.MarketCapRank is not null;
@@ -114,6 +116,14 @@ public partial class MainViewModel : ViewModelBase, IDisposable
         ? FormatCount(totalSupply)
         : "—";
 
+    public string FormattedVolume => CurrentAssetData is { } assetData
+        ? FormatLargeNumber(assetData.DailyVolume)
+        : string.Empty;
+
+    public string FormattedMarketCap => CurrentAssetData is { } assetData
+        ? FormatLargeNumber(assetData.MarketCap)
+        : string.Empty;
+
     public MainViewModel(ICoinGeckoService coinGeckoService)
     {
         _coinGeckoService = coinGeckoService;
@@ -157,6 +167,8 @@ public partial class MainViewModel : ViewModelBase, IDisposable
             OnPropertyChanged(nameof(SupplyPercent));
             OnPropertyChanged(nameof(FormattedCirculatingSupply));
             OnPropertyChanged(nameof(FormattedTotalSupply));
+            OnPropertyChanged(nameof(FormattedVolume));
+            OnPropertyChanged(nameof(FormattedMarketCap));
         }
         finally
         {
@@ -174,6 +186,10 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private void TogglePin() => IsPinned = !IsPinned;
 
+    partial void OnShowVolumeChanged(bool value) => OnPropertyChanged(nameof(ShowStatsRow));
+
+    partial void OnShowMarketCapChanged(bool value) => OnPropertyChanged(nameof(ShowStatsRow));
+
     private async void OnRefreshTimerTick(object? sender, EventArgs eventArgs) => await RefreshAssetDataAsync();
 
     private static string FormatCount(decimal value) => value switch
@@ -182,6 +198,15 @@ public partial class MainViewModel : ViewModelBase, IDisposable
         >= 1_000_000m => $"{value / 1_000_000m:F1}M",
         >= 1_000m => $"{value / 1_000m:F1}K",
         _ => $"{value:N0}",
+    };
+
+    private static string FormatLargeNumber(decimal value) => value switch
+    {
+        >= 1_000_000_000_000m => $"${value / 1_000_000_000_000m:F2}T",
+        >= 1_000_000_000m => $"${value / 1_000_000_000m:F2}B",
+        >= 1_000_000m => $"${value / 1_000_000m:F2}M",
+        >= 1_000m => $"${value / 1_000m:F2}K",
+        _ => $"${value:F2}",
     };
 
     public void Dispose()
