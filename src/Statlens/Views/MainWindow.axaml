@@ -22,29 +22,6 @@
         TransparencyLevelHint="Mica"
         Topmost="{Binding IsPinned, Mode=TwoWay}">
 
-    <Window.Styles>
-        <Style Selector="Button.headerIconButton">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="Width" Value="26" />
-            <Setter Property="Height" Value="26" />
-            <Setter Property="CornerRadius" Value="4" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-        </Style>
-        <Style Selector="TextBlock.iconGlyph">
-            <Setter Property="FontFamily" Value="Segoe Fluent Icons" />
-            <Setter Property="FontSize" Value="12" />
-        </Style>
-        <Style Selector="TextBlock.caption">
-            <Setter Property="FontSize" Value="8.5" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Opacity" Value="0.5" />
-            <Setter Property="Margin" Value="0,0,0,4" />
-        </Style>
-    </Window.Styles>
-
     <Panel Background="Transparent" PointerPressed="OnRootPointerPressed">
         <Panel.ContextMenu>
             <ContextMenu>

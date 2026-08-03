@@ -8,6 +8,7 @@
 
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="avares://Statlens/Styles/Controls.axaml" />
     </Application.Styles>
 
     <TrayIcon.Icons>
