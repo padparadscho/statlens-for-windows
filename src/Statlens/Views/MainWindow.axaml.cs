@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Platform;
 using Statlens.Interop;
@@ -27,9 +28,15 @@ public partial class MainWindow : Window
 
     private void OnRootPointerPressed(object? sender, PointerPressedEventArgs pointerEventArgs)
     {
-        if (pointerEventArgs.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        var pointerPoint = pointerEventArgs.GetCurrentPoint(this);
+
+        if (pointerPoint.Properties.IsLeftButtonPressed)
         {
             BeginMoveDrag(pointerEventArgs);
+        }
+        else if (pointerPoint.Properties.IsRightButtonPressed)
+        {
+            FlyoutBase.ShowAttachedFlyout(RootPanel);
         }
     }
 }

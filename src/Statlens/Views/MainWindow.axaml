@@ -22,29 +22,20 @@
         TransparencyLevelHint="Mica"
         Topmost="{Binding IsPinned, Mode=TwoWay}">
 
-    <Panel Background="Transparent" PointerPressed="OnRootPointerPressed">
-        <Panel.ContextMenu>
-            <ContextMenu>
-                <MenuItem Header="Change"
-                          ToggleType="CheckBox"
-                          IsChecked="{Binding ShowChange, Mode=TwoWay}" />
-                <MenuItem Header="Sparkline"
-                          ToggleType="CheckBox"
-                          IsChecked="{Binding ShowSparkline, Mode=TwoWay}" />
-                <MenuItem Header="Volume"
-                          ToggleType="CheckBox"
-                          IsChecked="{Binding ShowVolume, Mode=TwoWay}" />
-                <MenuItem Header="High/Low"
-                          ToggleType="CheckBox"
-                          IsChecked="{Binding ShowHighLow, Mode=TwoWay}" />
-                <MenuItem Header="Supply"
-                          ToggleType="CheckBox"
-                          IsChecked="{Binding ShowSupply, Mode=TwoWay}" />
-                <MenuItem Header="Market Cap"
-                          ToggleType="CheckBox"
-                          IsChecked="{Binding ShowMarketCap, Mode=TwoWay}" />
-            </ContextMenu>
-        </Panel.ContextMenu>
+    <Panel Name="RootPanel" Background="Transparent" PointerPressed="OnRootPointerPressed">
+        <FlyoutBase.AttachedFlyout>
+            <Flyout Placement="Pointer" ShowMode="Standard">
+                <StackPanel MinWidth="190" Spacing="0">
+                    <TextBlock Classes="caption" Text="STATS SHOWN" />
+                    <CheckBox Content="24h Change" IsChecked="{Binding ShowChange, Mode=TwoWay}" />
+                    <CheckBox Content="Sparkline" IsChecked="{Binding ShowSparkline, Mode=TwoWay}" />
+                    <CheckBox Content="24h High / Low" IsChecked="{Binding ShowHighLow, Mode=TwoWay}" />
+                    <CheckBox Content="24h Volume" IsChecked="{Binding ShowVolume, Mode=TwoWay}" />
+                    <CheckBox Content="Market Cap" IsChecked="{Binding ShowMarketCap, Mode=TwoWay}" />
+                    <CheckBox Content="Supply" IsChecked="{Binding ShowSupply, Mode=TwoWay}" />
+                </StackPanel>
+            </Flyout>
+        </FlyoutBase.AttachedFlyout>
 
         <StackPanel Margin="10" Spacing="6">
             <Grid VerticalAlignment="Center" ColumnDefinitions="Auto,*,Auto">
