@@ -17,7 +17,7 @@ namespace Statlens.ViewModels;
 public partial class MainViewModel : ViewModelBase, IDisposable
 {
     private const string CoinGeckoAssetId = "stronghold-token";
-    private static readonly TimeSpan RefreshInterval = TimeSpan.FromSeconds(600);
+    private static readonly TimeSpan RefreshInterval = TimeSpan.FromMinutes(10);
 
     private readonly ICoinGeckoService _coinGeckoService;
     private readonly DispatcherTimer _refreshTimer;
