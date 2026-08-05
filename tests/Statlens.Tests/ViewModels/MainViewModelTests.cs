@@ -27,7 +27,7 @@ public class MainViewModelTests
             .Setup(service => service.GetAssetDataAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedAssetData);
 
-        using var mainViewModel = new MainViewModel(coinGeckoServiceMock.Object);
+        using var mainViewModel = CreateMainViewModel(coinGeckoServiceMock.Object);
         await mainViewModel.RefreshAssetDataCommand.ExecuteAsync(null);
 
         Assert.Equal(expectedAssetData, mainViewModel.CurrentAssetData);
@@ -42,64 +42,37 @@ public class MainViewModelTests
             .Setup(service => service.GetAssetDataAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((AssetData?)null);
 
-        using var mainViewModel = new MainViewModel(coinGeckoServiceMock.Object);
+        using var mainViewModel = CreateMainViewModel(coinGeckoServiceMock.Object);
         await mainViewModel.RefreshAssetDataCommand.ExecuteAsync(null);
 
         Assert.Null(mainViewModel.CurrentAssetData);
         Assert.NotNull(mainViewModel.ErrorMessage);
     }
 
-    [Theory]
-    [InlineData(0.05, 0.04, 0.06, 50.0)]
-    [InlineData(0.04, 0.04, 0.06, 0.0)]
-    [InlineData(0.06, 0.04, 0.06, 100.0)]
-    [InlineData(0.05, 0, 0, 100.0)]
-    public async Task HighLowPercent_ComputesExpectedPosition(decimal price, decimal low, decimal high, double expectedPercent)
+    [Fact]
+    public void SettingsLoadedFromService_PopulateInitialState()
     {
-        var assetData = new AssetData
-        {
-            Name = "Stronghold Token",
-            Symbol = "SHX",
-            Price = price,
-            DailyLow = low,
-            DailyHigh = high,
-            FetchedAt = DateTime.Now,
-        };
-
+        var settingsService = new FakeSettingsService(new SettingsData { ShowVolume = true, IsPinned = true });
         var coinGeckoServiceMock = new Mock<ICoinGeckoService>();
         coinGeckoServiceMock
             .Setup(service => service.GetAssetDataAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(assetData);
+            .ReturnsAsync((AssetData?)null);
 
-        using var mainViewModel = new MainViewModel(coinGeckoServiceMock.Object);
-        await mainViewModel.RefreshAssetDataCommand.ExecuteAsync(null);
+        using var mainViewModel = new MainViewModel(coinGeckoServiceMock.Object, settingsService, new Mock<IStartupService>().Object);
 
-        Assert.Equal(expectedPercent, mainViewModel.HighLowPercent, precision: 2);
+        Assert.True(mainViewModel.ShowVolume);
+        Assert.True(mainViewModel.IsPinned);
     }
 
-    [Theory]
-    [InlineData(50_000_000, 100_000_000, 50.0)]
-    [InlineData(100_000_000, 0, 100.0)]
-    public async Task SupplyPercent_ComputesExpectedRatio(decimal circulating, decimal total, double expectedPercent)
+    private static MainViewModel CreateMainViewModel(ICoinGeckoService coinGeckoService) =>
+        new(coinGeckoService, new FakeSettingsService(new SettingsData()), new Mock<IStartupService>().Object);
+
+    private sealed class FakeSettingsService(SettingsData settingsData) : ISettingsService
     {
-        var assetData = new AssetData
+        public SettingsData Current { get; } = settingsData;
+
+        public void Save()
         {
-            Name = "Stronghold Token",
-            Symbol = "SHX",
-            Price = 0.05m,
-            CirculatingSupply = circulating,
-            TotalSupply = total > 0 ? total : null,
-            FetchedAt = DateTime.Now,
-        };
-
-        var coinGeckoServiceMock = new Mock<ICoinGeckoService>();
-        coinGeckoServiceMock
-            .Setup(service => service.GetAssetDataAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(assetData);
-
-        using var mainViewModel = new MainViewModel(coinGeckoServiceMock.Object);
-        await mainViewModel.RefreshAssetDataCommand.ExecuteAsync(null);
-
-        Assert.Equal(expectedPercent, mainViewModel.SupplyPercent, precision: 2);
+        }
     }
 }

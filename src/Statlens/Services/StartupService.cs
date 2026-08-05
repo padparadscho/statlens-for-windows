@@ -1,12 +1,10 @@
 // SPDX-FileCopyrightText: 2026 Padparadscho <contact@padparadscho.com>
 // SPDX-License-Identifier: AGPL-3.0-only
 
-using System.Runtime.Versioning;
 using Microsoft.Win32;
 
 namespace Statlens.Services;
 
-[SupportedOSPlatform("windows")]
 public sealed class StartupService : IStartupService
 {
     private const string RunKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";

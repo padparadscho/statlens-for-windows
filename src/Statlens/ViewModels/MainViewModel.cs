@@ -20,7 +20,10 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     private static readonly TimeSpan RefreshInterval = TimeSpan.FromMinutes(10);
 
     private readonly ICoinGeckoService _coinGeckoService;
+    private readonly ISettingsService _settingsService;
+    private readonly IStartupService _startupService;
     private readonly DispatcherTimer _refreshTimer;
+    private readonly bool _isLoadingSettings;
 
     [ObservableProperty]
     public partial bool IsPinned { get; set; }
@@ -44,6 +47,9 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     public partial bool ShowMarketCap { get; set; }
 
     [ObservableProperty]
+    public partial bool IsStartWithWindowsEnabled { get; set; }
+
+    [ObservableProperty]
     public partial AssetData? CurrentAssetData { get; set; }
 
     [ObservableProperty]
@@ -51,6 +57,10 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
     [ObservableProperty]
     public partial string? ErrorMessage { get; set; }
+
+    public double? WindowPositionX { get; set; }
+
+    public double? WindowPositionY { get; set; }
 
     public bool ShowStatsRow => ShowVolume || ShowMarketCap;
 
@@ -124,9 +134,15 @@ public partial class MainViewModel : ViewModelBase, IDisposable
         ? FormatLargeNumber(assetData.MarketCap)
         : string.Empty;
 
-    public MainViewModel(ICoinGeckoService coinGeckoService)
+    public MainViewModel(ICoinGeckoService coinGeckoService, ISettingsService settingsService, IStartupService startupService)
     {
         _coinGeckoService = coinGeckoService;
+        _settingsService = settingsService;
+        _startupService = startupService;
+
+        _isLoadingSettings = true;
+        LoadSettings();
+        _isLoadingSettings = false;
 
         _refreshTimer = new DispatcherTimer
         {
@@ -186,9 +202,79 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private void TogglePin() => IsPinned = !IsPinned;
 
-    partial void OnShowVolumeChanged(bool value) => OnPropertyChanged(nameof(ShowStatsRow));
+    public void SaveWindowPosition(double positionX, double positionY)
+    {
+        WindowPositionX = positionX;
+        WindowPositionY = positionY;
+        SaveSettings();
+    }
 
-    partial void OnShowMarketCapChanged(bool value) => OnPropertyChanged(nameof(ShowStatsRow));
+    partial void OnShowVolumeChanged(bool value)
+    {
+        OnPropertyChanged(nameof(ShowStatsRow));
+        SaveSettings();
+    }
+
+    partial void OnShowMarketCapChanged(bool value)
+    {
+        OnPropertyChanged(nameof(ShowStatsRow));
+        SaveSettings();
+    }
+
+    partial void OnShowChangeChanged(bool value) => SaveSettings();
+
+    partial void OnShowSparklineChanged(bool value) => SaveSettings();
+
+    partial void OnShowHighLowChanged(bool value) => SaveSettings();
+
+    partial void OnShowSupplyChanged(bool value) => SaveSettings();
+
+    partial void OnIsPinnedChanged(bool value) => SaveSettings();
+
+    partial void OnIsStartWithWindowsEnabledChanged(bool value)
+    {
+        _startupService.SetEnabled(value);
+        SaveSettings();
+    }
+
+    private void LoadSettings()
+    {
+        var settingsData = _settingsService.Current;
+
+        ShowChange = settingsData.ShowChange;
+        ShowSparkline = settingsData.ShowSparkline;
+        ShowVolume = settingsData.ShowVolume;
+        ShowHighLow = settingsData.ShowHighLow;
+        ShowSupply = settingsData.ShowSupply;
+        ShowMarketCap = settingsData.ShowMarketCap;
+        IsPinned = settingsData.IsPinned;
+        IsStartWithWindowsEnabled = settingsData.StartWithWindows;
+        WindowPositionX = settingsData.WindowPositionX;
+        WindowPositionY = settingsData.WindowPositionY;
+    }
+
+    private void SaveSettings()
+    {
+        if (_isLoadingSettings)
+        {
+            return;
+        }
+
+        var settingsData = _settingsService.Current;
+
+        settingsData.ShowChange = ShowChange;
+        settingsData.ShowSparkline = ShowSparkline;
+        settingsData.ShowVolume = ShowVolume;
+        settingsData.ShowHighLow = ShowHighLow;
+        settingsData.ShowSupply = ShowSupply;
+        settingsData.ShowMarketCap = ShowMarketCap;
+        settingsData.IsPinned = IsPinned;
+        settingsData.StartWithWindows = IsStartWithWindowsEnabled;
+        settingsData.WindowPositionX = WindowPositionX;
+        settingsData.WindowPositionY = WindowPositionY;
+
+        _settingsService.Save();
+    }
 
     private async void OnRefreshTimerTick(object? sender, EventArgs eventArgs) => await RefreshAssetDataAsync();
 

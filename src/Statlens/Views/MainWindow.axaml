@@ -51,6 +51,13 @@
                               Content="Supply"
                               HorizontalAlignment="Stretch"
                               IsChecked="{Binding ShowSupply, Mode=TwoWay}" />
+
+                    <Separator Margin="0,8" />
+
+                    <CheckBox Background="Transparent"
+                              Content="Start with Windows"
+                              HorizontalAlignment="Stretch"
+                              IsChecked="{Binding IsStartWithWindowsEnabled, Mode=TwoWay}" />
                 </StackPanel>
             </Flyout>
         </FlyoutBase.AttachedFlyout>

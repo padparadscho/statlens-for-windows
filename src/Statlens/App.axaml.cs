@@ -1,8 +1,10 @@
 // SPDX-FileCopyrightText: 2026 Padparadscho <contact@padparadscho.com>
 // SPDX-License-Identifier: AGPL-3.0-only
 
+using System;
 using System.Net.Http;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Statlens.Services;
@@ -11,9 +13,10 @@ using Statlens.Views;
 
 namespace Statlens;
 
-public partial class App : Application
+public partial class App : Application, IDisposable
 {
     private MainWindow? _mainWindow;
+    private MainViewModel? _mainViewModel;
 
     public override void Initialize() => AvaloniaXamlLoader.Load(this);
 
@@ -22,23 +25,41 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var coinGeckoService = new CoinGeckoService(new HttpClient());
+            var settingsService = new SettingsService();
+            var startupService = new StartupService();
+
+            _mainViewModel = new MainViewModel(coinGeckoService, settingsService, startupService);
 
             _mainWindow = new MainWindow
             {
-                DataContext = new MainViewModel(coinGeckoService),
+                DataContext = _mainViewModel,
             };
 
+            if (_mainViewModel.WindowPositionX is { } positionX && _mainViewModel.WindowPositionY is { } positionY)
+            {
+                _mainWindow.Position = new PixelPoint((int)positionX, (int)positionY);
+                _mainWindow.WindowStartupLocation = WindowStartupLocation.Manual;
+            }
+
+            _mainWindow.PositionChanged += OnMainWindowPositionChanged;
+
             desktop.MainWindow = _mainWindow;
+            desktop.ShutdownRequested += OnShutdownRequested;
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private void OnTrayIconClicked(object? sender, System.EventArgs eventArgs) => ToggleMainWindowVisibility();
+    private void OnMainWindowPositionChanged(object? sender, PixelPointEventArgs pixelPointEventArgs) =>
+        _mainViewModel?.SaveWindowPosition(pixelPointEventArgs.Point.X, pixelPointEventArgs.Point.Y);
 
-    private void OnToggleVisibilityClicked(object? sender, System.EventArgs eventArgs) => ToggleMainWindowVisibility();
+    private void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs shutdownRequestedEventArgs) => Dispose();
 
-    private void OnExitClicked(object? sender, System.EventArgs eventArgs)
+    private void OnTrayIconClicked(object? sender, EventArgs eventArgs) => ToggleMainWindowVisibility();
+
+    private void OnToggleVisibilityClicked(object? sender, EventArgs eventArgs) => ToggleMainWindowVisibility();
+
+    private void OnExitClicked(object? sender, EventArgs eventArgs)
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -61,5 +82,11 @@ public partial class App : Application
         {
             _mainWindow.Show();
         }
+    }
+
+    public void Dispose()
+    {
+        _mainViewModel?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }
