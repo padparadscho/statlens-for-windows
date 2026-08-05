@@ -82,8 +82,6 @@ public partial class App : Application, IDisposable
 
     private void OnTrayIconClicked(object? sender, EventArgs eventArgs) => ToggleMainWindowVisibility();
 
-    private void OnToggleVisibilityClicked(object? sender, EventArgs eventArgs) => ToggleMainWindowVisibility();
-
     private void OnExitClicked(object? sender, EventArgs eventArgs)
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
