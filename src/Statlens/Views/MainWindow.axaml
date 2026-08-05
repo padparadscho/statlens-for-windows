@@ -136,7 +136,7 @@
                            FontSize="28"
                            FontWeight="Bold"
                            Foreground="{Binding PriceBrush}"
-                           Text="{Binding CurrentAssetData.Price, StringFormat='${0:N4}'}"
+                           Text="{Binding CurrentAssetData.Price, StringFormat='${0:N5}'}"
                            TextTrimming="CharacterEllipsis"
                            VerticalAlignment="Center" />
                 <Border Grid.Column="1"

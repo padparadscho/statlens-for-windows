@@ -100,9 +100,9 @@ public partial class MainViewModel : ViewModelBase, IDisposable
         }
     }
 
-    public string FormattedDailyLow => CurrentAssetData is { } assetData ? $"${assetData.DailyLow:N4}" : string.Empty;
+    public string FormattedDailyLow => CurrentAssetData is { } assetData ? $"${assetData.DailyLow:N5}" : string.Empty;
 
-    public string FormattedDailyHigh => CurrentAssetData is { } assetData ? $"${assetData.DailyHigh:N4}" : string.Empty;
+    public string FormattedDailyHigh => CurrentAssetData is { } assetData ? $"${assetData.DailyHigh:N5}" : string.Empty;
 
     public double SupplyPercent
     {
