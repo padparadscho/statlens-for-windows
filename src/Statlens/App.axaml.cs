@@ -2,11 +2,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 using System;
+using System.ComponentModel;
 using System.Net.Http;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using Statlens.Services;
 using Statlens.ViewModels;
 using Statlens.Views;
@@ -29,6 +31,7 @@ public partial class App : Application, IDisposable
             var startupService = new StartupService();
 
             _mainViewModel = new MainViewModel(coinGeckoService, settingsService, startupService);
+            _mainViewModel.PropertyChanged += OnMainViewModelPropertyChanged;
 
             _mainWindow = new MainWindow
             {
@@ -45,9 +48,31 @@ public partial class App : Application, IDisposable
 
             desktop.MainWindow = _mainWindow;
             desktop.ShutdownRequested += OnShutdownRequested;
+
+            UpdateTrayIcon();
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private void OnMainViewModelPropertyChanged(object? sender, PropertyChangedEventArgs propertyChangedEventArgs)
+    {
+        if (propertyChangedEventArgs.PropertyName == nameof(MainViewModel.CurrentAssetData))
+        {
+            UpdateTrayIcon();
+        }
+    }
+
+    private void UpdateTrayIcon()
+    {
+        var trayIcons = TrayIcon.GetIcons(this);
+        if (trayIcons is not { Count: > 0 } || _mainViewModel is null)
+        {
+            return;
+        }
+
+        var glyph = _mainViewModel.IsChangePositive ? "\uEAFC" : "\uEF42";
+        trayIcons[0].Icon = TrayIconService.RenderGlyphIcon(glyph, Brushes.White);
     }
 
     private void OnMainWindowPositionChanged(object? sender, PixelPointEventArgs pixelPointEventArgs) =>
