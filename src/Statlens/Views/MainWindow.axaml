@@ -1,158 +1,187 @@
-<!-- SPDX-FileCopyrightText: 2026 Padparadscho <contact@padparadscho.com> -->
-<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+﻿<!-- SPDX-FileCopyrightText: 2026 Padparadscho <contact@padparadscho.com> -->
+<!--  SPDX-License-Identifier: AGPL-3.0-only  -->
 
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:Statlens.ViewModels"
-        xmlns:controls="using:Statlens.Controls"
-        xmlns:converters="using:Avalonia.Data.Converters"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="260" d:DesignHeight="200"
-        x:Class="Statlens.Views.MainWindow"
-        x:DataType="vm:MainViewModel"
-        Title="Statlens"
-        Width="260"
-        SizeToContent="Height"
-        CanResize="False"
-        WindowDecorations="None"
-        ShowInTaskbar="False"
-        WindowStartupLocation="CenterScreen"
+<Window
+    x:Class="Statlens.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Statlens.Controls"
+    xmlns:converters="using:Avalonia.Data.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Statlens.ViewModels"
+    Title="Statlens"
+    Width="260"
+    d:DesignHeight="200"
+    d:DesignWidth="260"
+    x:DataType="vm:MainViewModel"
+    Background="Transparent"
+    CanResize="False"
+    ShowInTaskbar="False"
+    SizeToContent="Height"
+    Topmost="{Binding IsPinned, Mode=TwoWay}"
+    TransparencyLevelHint="Mica"
+    WindowDecorations="None"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <Panel
+        Name="RootPanel"
         Background="Transparent"
-        TransparencyLevelHint="Mica"
-        Topmost="{Binding IsPinned, Mode=TwoWay}">
-
-    <Panel Name="RootPanel" Background="Transparent" PointerPressed="OnRootPointerPressed">
+        PointerPressed="OnRootPointerPressed">
         <FlyoutBase.AttachedFlyout>
             <Flyout Placement="Pointer" ShowMode="Standard">
                 <StackPanel Spacing="0">
                     <TextBlock Classes="caption" Text="STATS SHOWN" />
-                    <CheckBox Background="Transparent"
-                              Content="24h Change"
-                              HorizontalAlignment="Stretch"
-                              IsChecked="{Binding ShowChange, Mode=TwoWay}" />
-                    <CheckBox Background="Transparent"
-                              Content="Sparkline"
-                              HorizontalAlignment="Stretch"
-                              IsChecked="{Binding ShowSparkline, Mode=TwoWay}" />
-                    <CheckBox Background="Transparent"
-                              Content="24h High / Low"
-                              HorizontalAlignment="Stretch"
-                              IsChecked="{Binding ShowHighLow, Mode=TwoWay}" />
-                    <CheckBox Background="Transparent"
-                              Content="24h Volume"
-                              HorizontalAlignment="Stretch"
-                              IsChecked="{Binding ShowVolume, Mode=TwoWay}" />
-                    <CheckBox Background="Transparent"
-                              Content="Market Cap"
-                              HorizontalAlignment="Stretch"
-                              IsChecked="{Binding ShowMarketCap, Mode=TwoWay}" />
-                    <CheckBox Background="Transparent"
-                              Content="Supply"
-                              HorizontalAlignment="Stretch"
-                              IsChecked="{Binding ShowSupply, Mode=TwoWay}" />
+                    <CheckBox
+                        HorizontalAlignment="Stretch"
+                        Background="Transparent"
+                        Content="24h Change"
+                        IsChecked="{Binding ShowChange, Mode=TwoWay}" />
+                    <CheckBox
+                        HorizontalAlignment="Stretch"
+                        Background="Transparent"
+                        Content="Sparkline"
+                        IsChecked="{Binding ShowSparkline, Mode=TwoWay}" />
+                    <CheckBox
+                        HorizontalAlignment="Stretch"
+                        Background="Transparent"
+                        Content="24h High / Low"
+                        IsChecked="{Binding ShowHighLow, Mode=TwoWay}" />
+                    <CheckBox
+                        HorizontalAlignment="Stretch"
+                        Background="Transparent"
+                        Content="24h Volume"
+                        IsChecked="{Binding ShowVolume, Mode=TwoWay}" />
+                    <CheckBox
+                        HorizontalAlignment="Stretch"
+                        Background="Transparent"
+                        Content="Market Cap"
+                        IsChecked="{Binding ShowMarketCap, Mode=TwoWay}" />
+                    <CheckBox
+                        HorizontalAlignment="Stretch"
+                        Background="Transparent"
+                        Content="Supply"
+                        IsChecked="{Binding ShowSupply, Mode=TwoWay}" />
 
                     <Separator Margin="0,8" />
 
-                    <CheckBox Background="Transparent"
-                              Content="Start with Windows"
-                              HorizontalAlignment="Stretch"
-                              IsChecked="{Binding IsStartWithWindowsEnabled, Mode=TwoWay}" />
+                    <CheckBox
+                        HorizontalAlignment="Stretch"
+                        Background="Transparent"
+                        Content="Start with Windows"
+                        IsChecked="{Binding IsStartWithWindowsEnabled, Mode=TwoWay}" />
                 </StackPanel>
             </Flyout>
         </FlyoutBase.AttachedFlyout>
 
         <StackPanel Margin="10" Spacing="6">
             <Grid VerticalAlignment="Center" ColumnDefinitions="Auto,*,Auto">
-                <Image Width="24"
-                       Height="24"
-                       VerticalAlignment="Center"
-                       Source="avares://Statlens/Assets/Stronghold.png"
-                       Stretch="Uniform" />
+                <Image
+                    Width="24"
+                    Height="24"
+                    VerticalAlignment="Center"
+                    Source="avares://Statlens/Assets/Stronghold.png"
+                    Stretch="Uniform" />
 
-                <StackPanel Grid.Column="1"
-                            Margin="7,0,0,0"
-                            VerticalAlignment="Center">
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="7,0,0,0"
+                    VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <TextBlock FontSize="13"
-                                   FontWeight="SemiBold"
-                                   Text="{Binding CurrentAssetData.Name}"
-                                   VerticalAlignment="Center" />
-                        <Border Background="{DynamicResource RankBadgeBackgroundBrush}"
-                                CornerRadius="7"
-                                IsVisible="{Binding HasRank}"
-                                Margin="5,0,0,0"
-                                Padding="5,1"
-                                VerticalAlignment="Center">
-                            <TextBlock FontSize="8.5"
-                                       FontWeight="SemiBold"
-                                       HorizontalAlignment="Center"
-                                       LineHeight="10"
-                                       Text="{Binding RankText}"
-                                       VerticalAlignment="Center" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="13"
+                            FontWeight="SemiBold"
+                            Text="{Binding CurrentAssetData.Name}" />
+                        <Border
+                            Margin="5,0,0,0"
+                            Padding="5,1"
+                            VerticalAlignment="Center"
+                            Background="{DynamicResource RankBadgeBackgroundBrush}"
+                            CornerRadius="7"
+                            IsVisible="{Binding HasRank}">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="8.5"
+                                FontWeight="SemiBold"
+                                LineHeight="10"
+                                Text="{Binding RankText}" />
                         </Border>
                     </StackPanel>
-                    <TextBlock FontSize="9"
-                               Margin="0,1,0,0"
-                               Opacity="0.45"
-                               Text="{Binding CurrentAssetData.Symbol}" />
+                    <TextBlock
+                        Margin="0,1,0,0"
+                        FontSize="9"
+                        Opacity="0.45"
+                        Text="{Binding CurrentAssetData.Symbol}" />
                 </StackPanel>
 
-                <StackPanel Grid.Column="2"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center">
-                    <Button Classes="headerIconButton"
-                            Command="{Binding RefreshAssetDataCommand}"
-                            ToolTip.Tip="Refresh">
+                <StackPanel
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <Button
+                        Classes="headerIconButton"
+                        Command="{Binding RefreshAssetDataCommand}"
+                        ToolTip.Tip="Refresh">
                         <TextBlock Classes="iconGlyph" Text="&#xE72C;" />
                     </Button>
-                    <Button Classes="headerIconButton"
-                            Command="{Binding OpenOnCoinGeckoCommand}"
-                            ToolTip.Tip="View on CoinGecko">
+                    <Button
+                        Classes="headerIconButton"
+                        Command="{Binding OpenOnCoinGeckoCommand}"
+                        ToolTip.Tip="View on CoinGecko">
                         <TextBlock Classes="iconGlyph" Text="&#xE774;" />
                     </Button>
-                    <Button Classes="headerIconButton"
-                            Command="{Binding TogglePinCommand}"
-                            ToolTip.Tip="Always on top">
+                    <Button
+                        Classes="headerIconButton"
+                        Command="{Binding TogglePinCommand}"
+                        ToolTip.Tip="Always on top">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock Classes="iconGlyph"
-                                       IsVisible="{Binding !IsPinned}"
-                                       Text="&#xE718;" />
-                            <TextBlock Classes="iconGlyph"
-                                       IsVisible="{Binding IsPinned}"
-                                       Text="&#xE77A;" />
+                            <TextBlock
+                                Classes="iconGlyph"
+                                IsVisible="{Binding !IsPinned}"
+                                Text="&#xE718;" />
+                            <TextBlock
+                                Classes="iconGlyph"
+                                IsVisible="{Binding IsPinned}"
+                                Text="&#xE77A;" />
                         </Grid>
                     </Button>
                 </StackPanel>
             </Grid>
 
-            <TextBlock HorizontalAlignment="Center"
-                       Foreground="OrangeRed"
-                       IsVisible="{Binding ErrorMessage, Converter={x:Static converters:StringConverters.IsNotNullOrEmpty}}"
-                       Text="{Binding ErrorMessage}" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                Foreground="OrangeRed"
+                IsVisible="{Binding ErrorMessage, Converter={x:Static converters:StringConverters.IsNotNullOrEmpty}}"
+                Text="{Binding ErrorMessage}" />
 
             <Grid Margin="0,8,0,0" ColumnDefinitions="*,Auto">
-                <TextBlock Grid.Column="0"
-                           FontSize="28"
-                           FontWeight="Bold"
-                           Foreground="{Binding PriceBrush}"
-                           Text="{Binding CurrentAssetData.Price, StringFormat='${0:N5}'}"
-                           TextTrimming="CharacterEllipsis"
-                           VerticalAlignment="Center" />
-                <Border Grid.Column="1"
-                        Background="{Binding ChangeBadgeBrush}"
-                        CornerRadius="6"
-                        Height="21"
-                        IsVisible="{Binding ShowChange}"
-                        Margin="6,0,0,0"
-                        Padding="7,0"
-                        VerticalAlignment="Center">
-                    <TextBlock FontSize="10.5"
-                               FontWeight="Bold"
-                               Foreground="{Binding ChangeBrush}"
-                               HorizontalAlignment="Center"
-                               Text="{Binding CurrentAssetData.DailyChangePercentage, StringFormat='{}{0:+0.00;-0.00}%'}"
-                               VerticalAlignment="Center" />
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    FontSize="28"
+                    FontWeight="Bold"
+                    Foreground="{Binding PriceBrush}"
+                    Text="{Binding CurrentAssetData.Price, StringFormat='${0:N5}'}"
+                    TextTrimming="CharacterEllipsis" />
+                <Border
+                    Grid.Column="1"
+                    Height="21"
+                    Margin="6,0,0,0"
+                    Padding="7,0"
+                    VerticalAlignment="Center"
+                    Background="{Binding ChangeBadgeBrush}"
+                    CornerRadius="6"
+                    IsVisible="{Binding ShowChange}">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="10.5"
+                        FontWeight="Bold"
+                        Foreground="{Binding ChangeBrush}"
+                        Text="{Binding CurrentAssetData.DailyChangePercentage, StringFormat='{}{0:+0.00;-0.00}%'}" />
                 </Border>
             </Grid>
 
@@ -164,14 +193,16 @@
                     </controls:RangeBarControl.FillBrush>
                 </controls:RangeBarControl>
                 <Grid Margin="0,2,0,0" ColumnDefinitions="*,Auto">
-                    <TextBlock Grid.Column="0"
-                               FontSize="8.5"
-                               Opacity="0.55"
-                               Text="{Binding FormattedDailyLow}" />
-                    <TextBlock Grid.Column="1"
-                               FontSize="8.5"
-                               Opacity="0.55"
-                               Text="{Binding FormattedDailyHigh}" />
+                    <TextBlock
+                        Grid.Column="0"
+                        FontSize="8.5"
+                        Opacity="0.55"
+                        Text="{Binding FormattedDailyLow}" />
+                    <TextBlock
+                        Grid.Column="1"
+                        FontSize="8.5"
+                        Opacity="0.55"
+                        Text="{Binding FormattedDailyHigh}" />
                 </Grid>
             </StackPanel>
 
@@ -198,22 +229,25 @@
                     </controls:RangeBarControl.FillBrush>
                 </controls:RangeBarControl>
                 <Grid Margin="0,2,0,0" ColumnDefinitions="*,Auto">
-                    <TextBlock Grid.Column="0"
-                               FontSize="8.5"
-                               Opacity="0.55"
-                               Text="{Binding FormattedCirculatingSupply}" />
-                    <TextBlock Grid.Column="1"
-                               FontSize="8.5"
-                               Opacity="0.55"
-                               Text="{Binding FormattedTotalSupply}" />
+                    <TextBlock
+                        Grid.Column="0"
+                        FontSize="8.5"
+                        Opacity="0.55"
+                        Text="{Binding FormattedCirculatingSupply}" />
+                    <TextBlock
+                        Grid.Column="1"
+                        FontSize="8.5"
+                        Opacity="0.55"
+                        Text="{Binding FormattedTotalSupply}" />
                 </Grid>
             </StackPanel>
 
-            <controls:SparklineControl Height="46"
-                                        Margin="-10,8,-10,-9"
-                                        IsPositive="{Binding IsChangePositive}"
-                                        IsVisible="{Binding ShowSparkline}"
-                                        Prices="{Binding CurrentAssetData.Sparkline}" />
+            <controls:SparklineControl
+                Height="46"
+                Margin="-10,8,-10,-9"
+                IsPositive="{Binding IsChangePositive}"
+                IsVisible="{Binding ShowSparkline}"
+                Prices="{Binding CurrentAssetData.Sparkline}" />
         </StackPanel>
     </Panel>
 
