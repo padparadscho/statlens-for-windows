@@ -10,7 +10,7 @@
           "command": "bash",
           "arguments": [
             "-c",
-            "TMP=$(mktemp --suffix=.axaml) && cat > \"$TMP\" && $HOME/.dotnet/tools/xstyler -f \"$TMP\" > /dev/null 2>&1 && cat \"$TMP\" && rm \"$TMP\""
+            "TMP=$(mktemp --suffix=.axaml) && cat > \"$TMP\" && $HOME/.dotnet/tools/xstyler --write-to-stdout -f \"$TMP\" 2>/dev/null | tail -c +4 && rm \"$TMP\""
           ]
         }
       }
