@@ -9,6 +9,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Statlens.Services;
 using Statlens.ViewModels;
 using Statlens.Views;
@@ -49,11 +50,15 @@ public partial class App : Application, IDisposable
             desktop.MainWindow = _mainWindow;
             desktop.ShutdownRequested += OnShutdownRequested;
 
+            ActualThemeVariantChanged += OnActualThemeVariantChanged;
+
             UpdateTrayIcon();
         }
 
         base.OnFrameworkInitializationCompleted();
     }
+
+    private void OnActualThemeVariantChanged(object? sender, EventArgs eventArgs) => UpdateTrayIcon();
 
     private void OnMainViewModelPropertyChanged(object? sender, PropertyChangedEventArgs propertyChangedEventArgs)
     {
@@ -72,7 +77,8 @@ public partial class App : Application, IDisposable
         }
 
         var glyph = _mainViewModel.IsChangePositive ? "\uEAFC" : "\uEF42";
-        trayIcons[0].Icon = TrayIconService.RenderGlyphIcon(glyph, Brushes.White);
+        var iconBrush = ActualThemeVariant == ThemeVariant.Light ? Brushes.Black : Brushes.White;
+        trayIcons[0].Icon = TrayIconService.RenderGlyphIcon(glyph, iconBrush);
     }
 
     private void OnMainWindowPositionChanged(object? sender, PixelPointEventArgs pixelPointEventArgs) =>

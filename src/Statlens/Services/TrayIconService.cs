@@ -11,7 +11,7 @@ namespace Statlens.Services;
 
 internal static class TrayIconService
 {
-    private const int IconSize = 16;
+    private const int RenderSize = 64;
 
     public static WindowIcon RenderGlyphIcon(string glyph, IBrush foregroundBrush)
     {
@@ -20,16 +20,16 @@ internal static class TrayIconService
             CultureInfo.InvariantCulture,
             FlowDirection.LeftToRight,
             new Typeface("Segoe Fluent Icons"),
-            IconSize,
+            RenderSize,
             foregroundBrush);
 
-        var renderTargetBitmap = new RenderTargetBitmap(new PixelSize(IconSize, IconSize), new Vector(96, 96));
+        var renderTargetBitmap = new RenderTargetBitmap(new PixelSize(RenderSize, RenderSize), new Vector(96, 96));
 
         using (var drawingContext = renderTargetBitmap.CreateDrawingContext())
         {
             var textOrigin = new Point(
-                (IconSize - formattedText.Width) / 2,
-                (IconSize - formattedText.Height) / 2);
+                (RenderSize - formattedText.Width) / 2,
+                (RenderSize - formattedText.Height) / 2);
             drawingContext.DrawText(formattedText, textOrigin);
         }
 
