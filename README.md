@@ -11,6 +11,10 @@
 
 **Windows 11 (Avalonia UI)** tray widget for tracking **Stronghold (SHx)** asset metrics in real time.
 
+## Install
+
+Download `StatlensSetup.exe` from the [releases page](https://github.com/padparadscho/statlens-for-windows/releases) and run it.
+
 ## License
 
 This project is licensed under the [AGPL-3.0](/LICENSE) license.
